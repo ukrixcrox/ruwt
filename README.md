@@ -13,4 +13,6 @@ Project/
    |- index.js
 ```
 # Planned
+- [ ] command to create files with a webserver written in rust
 - [ ] command to create webserver with rute
+

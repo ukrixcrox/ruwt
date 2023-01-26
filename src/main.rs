@@ -6,15 +6,19 @@ use std::fs;
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
-#[command(author, version, about)]
-struct Args{
+#[command(author="krixcrox<falkwitte@github>", version, about)]
+struct Opts{
     ///Project name
     project_name:String,
+
+    ///Create rocket webserver
+    #[arg(short='w', long)]
+    webserver:bool,
 }
 
 
 fn main() {
-    let args = Args::parse();
+    let args = Opts::parse();
 
     // create root directory 
     create_root_dir(&args.project_name);

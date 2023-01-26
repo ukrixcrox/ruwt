@@ -24,7 +24,7 @@ fn main() {
     let args = Opts::parse();
 
     if args.webserver == "y"{
-        println!("Hello, Webserver");
+        println!("Hello, RocketWebserver");
     }
 
     // create root directory 

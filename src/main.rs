@@ -47,7 +47,18 @@ fn create_static_dir(path: &String) {
 
 fn create_html_boil(root_path: &String){
     let file_path = root_path.to_owned() + &String::from("/index.html");
-    let html_boil = "am\nto\nlazy\nto\nwrite\nboilerplate\ncode";
+    let html_boil = "<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Html-Boil</title>
+  <meta charset='UTF-8' />
+  <link rel='stylesheet' type='text/css' href='static/style.css'/>
+  <script type='text/javascript' src='static/index.js'></script>
+</head>
+<body>
+  <h1>Hello, world!</h1>
+</body>
+</html>";
 
     fs::write(file_path, html_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));
@@ -55,7 +66,15 @@ fn create_html_boil(root_path: &String){
 
 fn create_css_boil(path_static: &String){
     let file_path = path_static.to_owned() + &String::from("/style.css");
-    let css_boil = "am\nto\nlazy\nto\nwrite\nboilerplate\ncode";
+
+    let css_boil = "html{
+        background-color: black;
+    }
+
+    h1{
+        color:white;
+        text-align: center;
+    }";
 
     fs::write(file_path, css_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));
@@ -63,7 +82,7 @@ fn create_css_boil(path_static: &String){
 
 fn create_js_boil(path_static: String){
     let file_path = path_static + &String::from("/index.js");
-    let js_boil = "am\nto\nlazy\nto\nwrite\nboilerplate\ncode";
+    let js_boil = "console.log('Hello, World!')";
 
     fs::write(file_path, js_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));

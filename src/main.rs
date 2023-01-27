@@ -12,13 +12,21 @@ struct Opts{
     project_name:String,
 
     // currently does Nothing!
-    ///Create rocket webserver [y/n]
+    ///Create rocket webserver
     #[arg(short='w', long)]
     webserver:bool,
+
+    ///add file with Path
+    #[arg(short='f', long)]
+    add_file:bool,
 
     ///Verbose output
     #[arg(short='v', long)]
     verbose:bool,
+
+    ///create a go webserver dir structure instead of a vanilla website 
+    #[arg(short='g', long)]
+    go_dir_struc:bool,
 }
 
 
@@ -30,34 +38,71 @@ fn main() {
     }
 
     if args.verbose{
-        output_verbose(&args.project_name)
+        output_verbose(&args.project_name, args.go_dir_struc)
     }
 
-    // create root directory 
-    create_root_dir(&args.project_name);
+    if args.add_file{
+        println!("add file with path")
+    }
+
+    if !args.go_dir_struc{
+        // create root directory 
+        create_root_dir(&args.project_name);
+    } else if args.go_dir_struc{
+        create_go_dir_struc(&args.project_name)
+    }
+
 }
 
-fn output_verbose(root_dir: &String) {
-    println!("Creating Directory structure:
+fn output_verbose(root_dir: &String, go_dir_struc:bool) {
+    if !go_dir_struc{
+        println!("Creating Directory structure:
 
-{}/
-|- index.html
-|- static/
-   |- style.css
-   |- index.js
-", root_dir)
+    {}/
+    |- index.html
+    |- static/
+        |- style.css
+        |- index.js
+    ", root_dir)
+    } else if go_dir_struc{
+        println!("Creating Directory structure:
+        
+        {}/
+    |- cmd/
+        |-{}/
+    |- handler/
+        |-frontend/
+        |-backend/
+    |- modules/
+    |- server/
+    |- static
+        |-css/
+    |- templates/
+    ", root_dir, root_dir)
+    }
 }
 
-fn create_root_dir(name: &String) {
+fn create_go_dir_struc(project_name:&String){ 
+
+    let cmd_path = String::from("/cmd/") + project_name;
+    let path_arr = [cmd_path, String::from("/handler/frontend"), String::from("/handler/backend"), String::from("/modules"), String::from("/server"), String::from("/static/css"), String::from("/templates")];
+    
+    for items in path_arr{
+        fs::create_dir_all(project_name.to_owned()+&items).unwrap_or_else(|e| println!("Error: {}", e));
+    }
+
+}
+
+fn create_root_dir(project_name: &String) {
     fs::DirBuilder::new()
-        .create(name)
+        .create(project_name)
         .unwrap_or_else(|e| println!("Error: {}",e));
 
     //create the html boilerplate code
-    create_html_boil(name);
+    create_html_boil(project_name);
 
     // create "static" directory
-    let path_static = name.to_owned() + &String::from("/static");
+    let path_static = project_name.to_owned() + &String::from("/static");
     create_static_dir(&path_static);
 
     //create css boilerplate code
@@ -67,9 +112,9 @@ fn create_root_dir(name: &String) {
     create_js_boil(path_static);
 }
 
-fn create_static_dir(path: &String) {
+fn create_static_dir(path_static: &String) {
     fs::DirBuilder::new()
-        .create(path)
+        .create(path_static)
         .unwrap_or_else(|e| println!("Error: {}", e));
 }
 

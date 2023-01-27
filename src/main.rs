@@ -8,27 +8,44 @@ use std::fs;
 #[derive(Parser)]
 #[command(author="krixcrox<falkwitte@github>", version, about)]
 struct Opts{
+    ///Project name
+    project_name:String,
 
     // currently does Nothing!
     ///Create rocket webserver [y/n]
     #[arg(short='w', long)]
-    webserver:String,
+    webserver:bool,
 
-    ///Project name
-    project_name:String,
-
+    ///Verbose output
+    #[arg(short='v', long)]
+    verbose:bool,
 }
 
 
 fn main() {
     let args = Opts::parse();
 
-    if args.webserver == "y"{
+    if args.webserver{
         println!("Webserver");
+    }
+
+    if args.verbose{
+        output_verbose(&args.project_name)
     }
 
     // create root directory 
     create_root_dir(&args.project_name);
+}
+
+fn output_verbose(root_dir: &String) {
+    println!("Creating Directory structure:
+
+{}/
+|- index.html
+|- static/
+   |- style.css
+   |- index.js
+", root_dir)
 }
 
 fn create_root_dir(name: &String) {

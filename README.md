@@ -2,7 +2,7 @@
 cli tool that creates web templates
 
 # Usage
-ruwt {project name}
+ruwt (Options) {project name}
 
 ## Directory structure
 ```

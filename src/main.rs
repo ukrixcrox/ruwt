@@ -12,11 +12,11 @@ struct Opts{
     project_name:String,
 
     // currently does Nothing!
-    ///Create rocket webserver
+    ///Create rocket webserver (currently not working)
     #[arg(short='w', long)]
     webserver:bool,
 
-    ///add file with Path
+    ///add file with Path (currently not working)
     #[arg(short='f', long)]
     add_file:bool,
 

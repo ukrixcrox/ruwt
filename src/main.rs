@@ -10,12 +10,17 @@ use std::fs;
 struct Opts{
     ///Project name
     project_name:String,
-
+    
+    // creates a dir ~/.ruwt_rocket_webserver and copys this webserver into the project folder
+    // every time this flag is set
+    // changing the webserver in ~/.ruwt_rocket_webserver can change the webserver globaly 
     // currently does Nothing!
     ///Create rocket webserver (currently not working)
     #[arg(short='w', long)]
     webserver:bool,
 
+    // this gets a file path, opens the file and copys all the bytes into a 
+    // new file with the same name in the project folder.
     ///add file with Path (currently not working)
     #[arg(short='f', long)]
     add_file:bool,

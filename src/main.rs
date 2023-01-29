@@ -3,6 +3,7 @@
 
 use clap::Parser;
 use std::fs;
+use std::path;
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
@@ -23,7 +24,7 @@ struct Opts{
     // new file with the same name in the project folder.
     ///add file with Path (currently not working)
     #[arg(short='f', long)]
-    add_file:bool,
+    add_file:String,
 
     ///Verbose output
     #[arg(short='v', long)]
@@ -59,7 +60,23 @@ fn main() {
 
 }
 
-fn output_verbose(root_dir: &String, go_dir_struc:bool) {
+fn add_file(file_path:&String, project_name: &String) -> String{
+    let file_name = path::Path::new(file_path)
+        .file_name()
+        .unwrap()
+        .to_string()
+        .unwrap();
+    
+    let project_file_path = project_name.to_owned() + file_name;
+
+    fs::copy(file_path, project_file_path);
+
+    return file_name.to_string();
+}
+
+
+fn output_verbose(root_dir: &String, go_dir_struc:bool, add_file:bool, file_name:String) {
+
     if !go_dir_struc{
         println!("Creating Directory structure:
 
@@ -84,6 +101,16 @@ fn output_verbose(root_dir: &String, go_dir_struc:bool) {
         |-css/
     |- templates/
     ", root_dir, root_dir)
+    }else if add_file && !go_dir_struc{
+        println!("Creating Directory structure:
+
+    {}/
+    |- {}
+    |- index.html
+    |- static/
+        |- style.css
+        |- index.js
+    ", root_dir, file_name);
     }
 }
 

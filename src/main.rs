@@ -22,19 +22,15 @@ struct Opts{
 
     // this gets a file path, opens the file and copys all the bytes into a 
     // new file with the same name in the project folder.
-    ///add file with Path (currently not working)
-    #[arg(short='f', long)]
-    file_path:String,
-
-    /// add a whole directory plus sub dirs into the project folder (currently not working)
-    #[arg(short='f', long)]
-    dir_path:String,
+    ///add a arbitrary file
+    #[arg(short='f', long,)]
+    file_path:Option<String>,
 
     ///Verbose output
     #[arg(short='v', long)]
     verbose:bool,
 
-    ///create a go webserver dir structure instead of a vanilla website 
+    ///create a go webserver dir structure instead of a vanilla website dir structure
     #[arg(short='g', long)]
     go_dir_struc:bool,
 }
@@ -43,7 +39,7 @@ fn main() {
     let args = Opts::parse();
 
     if args.webserver{
-        println!("webserver");
+        use_webserver(&args.project_name);
     }
 
     if args.verbose{
@@ -51,15 +47,19 @@ fn main() {
     }
 
     if !args.go_dir_struc{
-        // create root directory 
         create_root_dir(&args.project_name);
     } else if args.go_dir_struc{
         create_go_dir_struc(&args.project_name)
     }
-    //TODO: inject after creating the project_folder
-    add_file(&args.file_path, &args.project_name);
+    
+    // checks weather the file_path field of the struct args has some value 
+    // and binds this value to the local variable file_path
+    if let Some(file_path) = &args.file_path{
+        add_file(&file_path, &args.project_name); 
+    }
 }
 
+#[allow(unused)]
 fn use_webserver(project_name: &String){
     println!("Create Webserver");
 
@@ -73,7 +73,8 @@ fn add_file(file_path:&String, project_name: &String){
         .unwrap();
 
     let project_file_path = project_name.to_owned() + "/" + file_name;
-    
+   
+    // creates empty file to copy bytes to
     fs::write(&project_file_path, "")
         .unwrap_or_else(|e| println!("Error: {}", e));
 
@@ -126,17 +127,13 @@ fn create_root_dir(project_name: &String) {
         .create(project_name)
         .unwrap_or_else(|e| println!("Error: {}",e));
 
-    //create the html boilerplate code
     create_html_boil(project_name);
 
-    // create "static" directory
     let path_static = project_name.to_owned() + &String::from("/static");
     create_static_dir(&path_static);
 
-    //create css boilerplate code
     create_css_boil(&path_static);
 
-    //create JavaScript boilerplate code
     create_js_boil(path_static);
 }
 

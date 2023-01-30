@@ -13,8 +13,8 @@ struct Opts{
     project_name:String,
     
     // creates a dir ~/.ruwt_rocket_webserver and copys this webserver into the project folder
-    // every time this flag is set
-    // changing the webserver in ~/.ruwt_rocket_webserver can change the webserver globaly 
+    // the first time this flag is set, then just check if the webserver file exists
+    // changing the webserver in ~/.ruwt_rocket_webserver changes the webserver globaly 
     // currently does Nothing!
     ///Create rocket webserver (currently not working)
     #[arg(short='w', long)]
@@ -24,7 +24,7 @@ struct Opts{
     // new file with the same name in the project folder.
     ///add file with Path (currently not working)
     #[arg(short='f', long)]
-    add_file:String,
+    file_path:String,
 
     ///Verbose output
     #[arg(short='v', long)]
@@ -40,15 +40,11 @@ fn main() {
     let args = Opts::parse();
 
     if args.webserver{
-        println!("Webserver");
+        println!("webserver");
     }
 
     if args.verbose{
         output_verbose(&args.project_name, args.go_dir_struc)
-    }
-
-    if args.add_file{
-        println!("add file with path")
     }
 
     if !args.go_dir_struc{
@@ -57,25 +53,27 @@ fn main() {
     } else if args.go_dir_struc{
         create_go_dir_struc(&args.project_name)
     }
-
+    //TODO: inject after creating the project_folder
+    add_file(&args.file_path, &args.project_name);
 }
 
-fn add_file(file_path:&String, project_name: &String) -> String{
+fn add_file(file_path:&String, project_name: &String){
     let file_name = path::Path::new(file_path)
         .file_name()
         .unwrap()
-        .to_string()
+        .to_str()
         .unwrap();
+
+    let project_file_path = project_name.to_owned() + "/" + file_name;
     
-    let project_file_path = project_name.to_owned() + file_name;
+    fs::write(&project_file_path, "")
+        .unwrap_or_else(|e| println!("Error: {}", e));
 
     fs::copy(file_path, project_file_path);
-
-    return file_name.to_string();
 }
 
 
-fn output_verbose(root_dir: &String, go_dir_struc:bool, add_file:bool, file_name:String) {
+fn output_verbose(root_dir: &String, go_dir_struc:bool) {
 
     if !go_dir_struc{
         println!("Creating Directory structure:
@@ -101,16 +99,6 @@ fn output_verbose(root_dir: &String, go_dir_struc:bool, add_file:bool, file_name
         |-css/
     |- templates/
     ", root_dir, root_dir)
-    }else if add_file && !go_dir_struc{
-        println!("Creating Directory structure:
-
-    {}/
-    |- {}
-    |- index.html
-    |- static/
-        |- style.css
-        |- index.js
-    ", root_dir, file_name);
     }
 }
 
@@ -120,7 +108,7 @@ fn create_go_dir_struc(project_name:&String){
     let path_arr = [cmd_path, String::from("/handler/frontend"), String::from("/handler/backend"), String::from("/modules"), String::from("/server"), String::from("/static/css"), String::from("/templates")];
     
     for items in path_arr{
-        fs::create_dir_all(project_name.to_owned()+&items).unwrap_or_else(|e| println!("Error: {}", e));
+        fs::create_dir_all(project_name.to_owned()+&items).unwrap_or_else(|e| println!("Error: {}",e));
     }
 
 }

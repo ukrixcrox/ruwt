@@ -26,6 +26,10 @@ struct Opts{
     #[arg(short='f', long)]
     file_path:String,
 
+    /// add a whole directory plus sub dirs into the project folder (currently not working)
+    #[arg(short='f', long)]
+    dir_path:String,
+
     ///Verbose output
     #[arg(short='v', long)]
     verbose:bool,
@@ -34,7 +38,6 @@ struct Opts{
     #[arg(short='g', long)]
     go_dir_struc:bool,
 }
-
 
 fn main() {
     let args = Opts::parse();
@@ -55,6 +58,11 @@ fn main() {
     }
     //TODO: inject after creating the project_folder
     add_file(&args.file_path, &args.project_name);
+}
+
+fn use_webserver(project_name: &String){
+    println!("Create Webserver");
+
 }
 
 fn add_file(file_path:&String, project_name: &String){

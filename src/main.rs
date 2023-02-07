@@ -1,9 +1,18 @@
 // Simple cli tool to create web boilerplate code 
 // Could use fs::create_dir function
+//
+//
+// TODO:
+// - write the html and static boil code into a directory ~/.ruwt_config 
+// so those files can be globaly easily configured
+
+
 
 use clap::Parser;
 use std::fs;
 use std::path;
+// for getting the home directory
+// use dirs;
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
@@ -12,14 +21,6 @@ struct Opts{
     ///Project name
     project_name:String,
     
-    // creates a dir ~/.ruwt_rocket_webserver and copys this webserver into the project folder
-    // the first time this flag is set, then just check if the webserver file exists
-    // changing the webserver in ~/.ruwt_rocket_webserver changes the webserver globaly 
-    // currently does Nothing!
-    ///Create rocket webserver (currently not working)
-    #[arg(short='w', long)]
-    webserver:bool,
-
     // this gets a file path, opens the file and copys all the bytes into a 
     // new file with the same name in the project folder.
     ///add a arbitrary file
@@ -38,10 +39,6 @@ struct Opts{
 fn main() {
     let args = Opts::parse();
 
-    if args.webserver{
-        use_webserver(&args.project_name);
-    }
-
     if args.verbose{
         output_verbose(&args.project_name, args.go_dir_struc)
     }
@@ -52,17 +49,11 @@ fn main() {
         create_go_dir_struc(&args.project_name)
     }
     
-    // checks weather the file_path field of the struct args has some value 
+    // checks whether the file_path field of the struct args has some value 
     // and binds this value to the local variable file_path
     if let Some(file_path) = &args.file_path{
         add_file(&file_path, &args.project_name); 
     }
-}
-
-#[allow(unused)]
-fn use_webserver(project_name: &String){
-    println!("Create Webserver");
-
 }
 
 fn add_file(file_path:&String, project_name: &String){

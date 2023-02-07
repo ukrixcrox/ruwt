@@ -12,7 +12,5 @@ Project/
    |- style.css
    |- index.js
 ```
-# Planned
-- [ ] command to create files with a webserver written in rust
-- [ ] command to create webserver with rute
-
+# TODO
+- [ ] create a dir where the files can be configured globally 

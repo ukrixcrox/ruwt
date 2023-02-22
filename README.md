@@ -13,4 +13,5 @@ Project/
    |- index.js
 ```
 # TODO
-- [ ] create a dir where the files can be configured globally 
+- [ ] create a dir where the boilerplate code files can be configured globally
+

@@ -6,8 +6,6 @@
 // - write the html and static boil code into a directory ~/.ruwt_config 
 // so those files can be globaly easily configured
 
-
-
 use clap::Parser;
 use std::fs;
 use std::path;
@@ -23,7 +21,7 @@ struct Opts{
     
     // this gets a file path, opens the file and copys all the bytes into a 
     // new file with the same name in the project folder.
-    ///add a arbitrary file
+    ///add a arbitrary file to the project folder
     #[arg(short='f', long,)]
     file_path:Option<String>,
 
@@ -52,7 +50,7 @@ fn main() {
     // checks whether the file_path field of the struct args has some value 
     // and binds this value to the local variable file_path
     if let Some(file_path) = &args.file_path{
-        add_file(&file_path, &args.project_name); 
+        add_file(file_path, &args.project_name); 
     }
 }
 
@@ -69,7 +67,7 @@ fn add_file(file_path:&String, project_name: &String){
     fs::write(&project_file_path, "")
         .unwrap_or_else(|e| println!("Error: {}", e));
 
-    fs::copy(file_path, project_file_path);
+    fs::copy(file_path, project_file_path).unwrap();
 }
 
 

@@ -6,6 +6,8 @@
 // - write the html and static boil code into a directory ~/.ruwt_config 
 // so those files can be globaly easily configured
 
+mod boil;
+
 use clap::Parser;
 use std::fs;
 use std::path;
@@ -116,14 +118,14 @@ fn create_root_dir(project_name: &String) {
         .create(project_name)
         .unwrap_or_else(|e| println!("Error: {}",e));
 
-    create_html_boil(project_name);
+    boil::create_html_boil(project_name);
 
     let path_static = project_name.to_owned() + &String::from("/static");
     create_static_dir(&path_static);
 
-    create_css_boil(&path_static);
+    boil::create_css_boil(&path_static);
 
-    create_js_boil(path_static);
+    boil::create_js_boil(path_static);
 }
 
 fn create_static_dir(path_static: &String) {
@@ -132,47 +134,6 @@ fn create_static_dir(path_static: &String) {
         .unwrap_or_else(|e| println!("Error: {}", e));
 }
 
-fn create_html_boil(root_path: &String){
-    let file_path = root_path.to_owned() + &String::from("/index.html");
-    let html_boil = "<!DOCTYPE html>
-<html lang='en'>
-<head>
-  <title>Html-Boil</title>
-  <meta charset='UTF-8' />
-  <link rel='stylesheet' type='text/css' href='static/style.css'/>
-  <script type='text/javascript' src='static/index.js'></script>
-</head>
-<body>
-  <h1>Hello, world!</h1>
-</body>
-</html>";
 
-    fs::write(file_path, html_boil)
-        .unwrap_or_else(|e| println!("Error: {}", e));
-}
-
-fn create_css_boil(path_static: &String){
-    let file_path = path_static.to_owned() + &String::from("/style.css");
-
-    let css_boil = "html{
-        background-color: black;
-    }
-
-    h1{
-        color:white;
-        text-align: center;
-    }";
-
-    fs::write(file_path, css_boil)
-        .unwrap_or_else(|e| println!("Error: {}", e));
-}
-
-fn create_js_boil(path_static: String){
-    let file_path = path_static + &String::from("/index.js");
-    let js_boil = "console.log('Hello, World!')";
-
-    fs::write(file_path, js_boil)
-        .unwrap_or_else(|e| println!("Error: {}", e));
-}
 
 

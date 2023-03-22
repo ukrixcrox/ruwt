@@ -24,15 +24,18 @@ struct Opts{
     // this gets a file path, opens the file and copys all the bytes into a 
     // new file with the same name in the project folder.
     ///add a arbitrary file to the project folder
-    #[arg(short='f', long,)]
+    #[arg(short='f')]
+    #[arg(long="file-path")]
     file_path:Option<String>,
 
     ///Verbose output
-    #[arg(short='v', long)]
+    #[arg(short='v')]
+    #[arg(long="verbose")]
     verbose:bool,
 
     ///create a go webserver dir structure instead of a vanilla website dir structure
-    #[arg(short='g', long)]
+    #[arg(short='g')]
+    #[arg(long="go-dir-struc")]
     go_dir_struc:bool,
 }
 

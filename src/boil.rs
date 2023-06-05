@@ -1,37 +1,32 @@
 use std::fs;
+use toml::{Table, Value};
+use dirs;
+use std::path::{PathBuf, Path};
 
 /// creates html boilerplate code in path/index.html
-pub fn create_html_boil(root_path: &String){
+pub fn get_boil(root_path: &String){
     let file_path = root_path.to_owned() + &String::from("/index.html");
-    let html_boil = "<!DOCTYPE html>
-<html lang='en'>
-<head>
-  <title>Html-Boil</title>
-  <meta charset='UTF-8' />
-  <link rel='stylesheet' type='text/css' href='static/style.css'/>
-  <script type='text/javascript' src='static/index.js'></script>
-</head>
-<body>
-  <h1>Hello, world!</h1>
-</body>
-</html>";
+    
+    let toml_data = fs::read_to_string(dirs::config_dir().unwrap().to_string_lossy().to_string() + &String::from("/ruwt_config/config.toml"))
+                            .expect("Failed to read the TOML file");
 
-    fs::write(file_path, html_boil)
+    /* 
+    let parsed_data: Value = toml::from_str(&toml_data)
+                            .expect("Failed to parse the TOML file");
+    */
+
+    let value = toml_data.parse::<Table>().unwrap(); 
+    
+
+ /*    fs::write(file_path, html_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));
+    */
 }
 
+/*
 /// creates css boilerplate code in path/style.css
 pub fn create_css_boil(path_static: &String){
     let file_path = path_static.to_owned() + &String::from("/style.css");
-
-    let css_boil = "html{
-        background-color: black;
-    }
-
-    h1{
-        color:white;
-        text-align: center;
-    }";
 
     fs::write(file_path, css_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));
@@ -40,8 +35,8 @@ pub fn create_css_boil(path_static: &String){
 /// creates js boilerplate code in path/index.js
 pub fn create_js_boil(path_static: String){
     let file_path = path_static + &String::from("/index.js");
-    let js_boil = "console.log('Hello, World!')";
 
     fs::write(file_path, js_boil)
         .unwrap_or_else(|e| println!("Error: {}", e));
 }
+*/

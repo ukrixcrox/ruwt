@@ -6,13 +6,17 @@
 // - write the html and static boil code into a directory ~/.ruwt_config 
 // so those files can be globaly easily configured
 
+mod commands;
 mod boil;
+mod server;
 
 use clap::Parser;
+use crate::server::start_server;
+use crate::commands::{add_file, output_verbose};
 use std::fs;
-use std::path;
+use std::path::Path;
 // for getting the home directory
-// use dirs;
+use dirs;
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
@@ -20,6 +24,12 @@ use std::path;
 struct Opts{
     ///Project name
     project_name:String,
+
+
+    ///Serve files with actix webserver
+    #[arg(short='r')]
+    #[arg(long="run")]
+    start_server:bool,
     
     // this gets a file path, opens the file and copys all the bytes into a 
     // new file with the same name in the project folder.
@@ -32,24 +42,25 @@ struct Opts{
     #[arg(short='v')]
     #[arg(long="verbose")]
     verbose:bool,
-
-    ///create a go webserver dir structure instead of a vanilla website dir structure
-    #[arg(short='g')]
-    #[arg(long="go-dir-struc")]
-    go_dir_struc:bool,
 }
 
 fn main() {
     let args = Opts::parse();
 
+
+
     if args.verbose{
-        output_verbose(&args.project_name, args.go_dir_struc)
+        output_verbose(&args.project_name);
     }
 
-    if !args.go_dir_struc{
+    let config_dir_string = dirs::config_dir().unwrap().to_string_lossy().to_string();
+    let config_file_path = config_dir_string + &String::from("/ruwt_config/config.toml");
+
+    if Path::new(&config_file_path).exists() {
         create_root_dir(&args.project_name);
-    } else if args.go_dir_struc{
-        create_go_dir_struc(&args.project_name)
+    }else{
+        println!("Error: no config file");
+        std::process::exit(0x100);
     }
     
     // checks whether the file_path field of the struct args has some value 
@@ -57,63 +68,11 @@ fn main() {
     if let Some(file_path) = &args.file_path{
         add_file(file_path, &args.project_name); 
     }
-}
 
-fn add_file(file_path:&String, project_name: &String){
-    let file_name = path::Path::new(file_path)
-        .file_name()
-        .unwrap()
-        .to_str()
-        .unwrap();
-
-    let project_file_path = project_name.to_owned() + "/" + file_name;
-   
-    // creates empty file to copy bytes to
-    fs::write(&project_file_path, "")
-        .unwrap_or_else(|e| println!("Error: {}", e));
-
-    fs::copy(file_path, project_file_path).unwrap();
-}
-
-
-fn output_verbose(root_dir: &String, go_dir_struc:bool) {
-
-    if !go_dir_struc{
-        println!("Creating Directory structure:
-
-    {}/
-    |- index.html
-    |- static/
-        |- style.css
-        |- index.js
-    ", root_dir)
-    } else if go_dir_struc{
-        println!("Creating Directory structure:
-        
-        {}/
-    |- cmd/
-        |-{}/
-    |- handler/
-        |-frontend/
-        |-backend/
-    |- modules/
-    |- server/
-    |- static
-        |-css/
-    |- templates/
-    ", root_dir, root_dir)
+    if args.start_server{
+        let dir = &args.project_name;
+        start_server(dir.to_owned()).unwrap();
     }
-}
-
-fn create_go_dir_struc(project_name:&String){ 
-
-    let cmd_path = String::from("/cmd/") + project_name;
-    let path_arr = [cmd_path, String::from("/handler/frontend"), String::from("/handler/backend"), String::from("/modules"), String::from("/server"), String::from("/static/css"), String::from("/templates")];
-    
-    for items in path_arr{
-        fs::create_dir_all(project_name.to_owned()+&items).unwrap_or_else(|e| println!("Error: {}",e));
-    }
-
 }
 
 fn create_root_dir(project_name: &String) {

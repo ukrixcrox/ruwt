@@ -1,5 +1,4 @@
-[html]
-code = '''
+html = '''
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -14,8 +13,7 @@ code = '''
 </html>
 '''
 
-[css]
-code = '''
+css = '''
 html{
         background-color: black;
     }
@@ -26,7 +24,6 @@ html{
     }
 '''
 
-[js]
-code = '''
+js = '''
 console.log("Hello, World!");
 '''

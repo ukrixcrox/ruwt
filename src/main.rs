@@ -9,14 +9,13 @@
 mod commands;
 mod boil;
 mod server;
+mod config;
 
 use clap::Parser;
 use crate::server::start_server;
-use crate::commands::{add_file, output_verbose};
-use std::fs;
+use crate::commands::{add_file, output_verbose, create_project};
+use crate::config::{parse_config};
 use std::path::Path;
-// for getting the home directory
-use dirs;
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
@@ -24,7 +23,6 @@ use dirs;
 struct Opts{
     ///Project name
     project_name:String,
-
 
     ///Serve files with actix webserver
     #[arg(short='r')]
@@ -57,9 +55,11 @@ fn main() {
     let config_file_path = config_dir_string + &String::from("/ruwt_config/config.toml");
 
     if Path::new(&config_file_path).exists() {
-        create_root_dir(&args.project_name);
+        create_project(&args.project_name, parse_config());
     }else{
-        println!("Error: no config file");
+        println!("Error: No config file");
+        println!("Generated config file at ~/.config/ruwt_config/config.toml");
+        config::create_config();
         std::process::exit(0x100);
     }
     
@@ -75,27 +75,4 @@ fn main() {
     }
 }
 
-fn create_root_dir(project_name: &String) {
-    fs::DirBuilder::new()
-        .create(project_name)
-        .unwrap_or_else(|e| println!("Error: {}",e));
-
-    boil::create_html_boil(project_name);
-
-    let path_static = project_name.to_owned() + &String::from("/static");
-    create_static_dir(&path_static);
-
-    boil::create_css_boil(&path_static);
-
-    boil::create_js_boil(path_static);
-}
-
-fn create_static_dir(path_static: &String) {
-    fs::DirBuilder::new()
-        .create(path_static)
-        .unwrap_or_else(|e| println!("Error: {}", e));
-}
-
-
-
-
+// TODO: refactor to commands.rs

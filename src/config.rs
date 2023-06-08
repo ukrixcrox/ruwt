@@ -2,6 +2,7 @@ use std::fs;
 use toml::Table;
 use dirs::config_dir;
 use std::path::PathBuf;
+use std::env::current_dir;
 
 const CONFIG_DATA: &str = "html = '''
 <!DOCTYPE html>
@@ -73,17 +74,19 @@ const SERVERCONFIG_DATA: &str = "projectfolder_path =  '''path/to/ruwt/project/d
 
 /// creates serverconfig.toml in the generated root dir
 pub fn create_serverconfig(project_dir: String){
-    let file_path = project_dir.to_owned() + "/serverconfig.toml";
+    let file_path = project_dir + "/serverconfig.toml";
 
     fs::write(file_path,SERVERCONFIG_DATA).unwrap();
     
 }
 
 /// parses serverconfig.toml
-pub fn parse_serverconfig(project_dir: String) -> Vec<String>{
+pub fn parse_serverconfig() -> Vec<String>{
     let mut parsed_data = vec![];
-    
-    let toml_data = fs::read_to_string(project_dir.to_owned() + "/serverconfig.toml")
+
+    let current_dir_string = current_dir().unwrap().to_str().unwrap().to_owned();    
+
+    let toml_data = fs::read_to_string(current_dir_string + "/serverconfig.toml")
                             .expect("Failed to read TOML file");
 
     let value = toml_data.parse::<Table>().unwrap();

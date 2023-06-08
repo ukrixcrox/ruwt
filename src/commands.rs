@@ -53,7 +53,6 @@ fn create_static_dir(path_static: &String) {
         .create(path_static)
         .unwrap_or_else(|e| println!("Error: {}", e));
 }
-//
 
 
 

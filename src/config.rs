@@ -1,6 +1,7 @@
 use std::fs;
 use toml::Table;
 use dirs::config_dir;
+use std::path::PathBuf;
 
 const CONFIG_DATA: &str = "html = '''
 <!DOCTYPE html>
@@ -37,7 +38,9 @@ pub fn create_config() {
 
     let config_dir_string = config_dir().unwrap().to_str().unwrap().to_owned(); 
 
-    fs::DirBuilder::new().create(config_dir_string + "/ruwt_config/").unwrap();
+    if !PathBuf::from(config_dir_string.clone() + "/ruwt_config/").exists(){
+        fs::DirBuilder::new().create(config_dir_string + "/ruwt_config/").unwrap();
+    }
 
     let file_path =  config_dir().unwrap().to_str().unwrap().to_owned() + "/ruwt_config/config.toml";
     fs::write(file_path, CONFIG_DATA).unwrap();

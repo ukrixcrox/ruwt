@@ -1,8 +1,9 @@
 use std::fs;
-use toml::Table;
 use dirs::config_dir;
 use std::path::PathBuf;
 use std::env::current_dir;
+use serde::{Deserialize, Serialize};
+
 
 const CONFIG_DATA: &str = "html = '''
 <!DOCTYPE html>
@@ -47,26 +48,28 @@ pub fn create_config() {
     fs::write(file_path, CONFIG_DATA).unwrap();
 }
 
-/// parses the ruwt_config/config.toml
-pub fn parse_config() -> Vec<String>{
 
-    let mut parsed_data= vec![];
+#[derive(Deserialize, Serialize)]
+pub struct ConfigData {
+    pub html: String,
+    pub css: String,
+    pub js: String,
+}
+
+/// parses the ruwt_config/config.toml
+pub fn parse_config() -> ConfigData {
+
+
+    let config_dir_string = dirs::config_dir().unwrap().to_string_lossy().to_string();
     
-    let toml_data = fs::read_to_string(dirs::config_dir().unwrap().to_string_lossy().to_string() + "/ruwt_config/config.toml")
+    let toml_data = fs::read_to_string( config_dir_string + "/ruwt_config/config.toml")
                             .expect("Failed to read the TOML file");
 
+    let value: ConfigData = toml::from_str(&toml_data).unwrap();
 
-    let value = toml_data.parse::<Table>().unwrap(); 
-    let valid_values = vec!["html", "css", "js"];
-
-    for valid_value in valid_values{
-        let parsing_value = value[valid_value].as_str().unwrap();
-        parsed_data.push(parsing_value.to_owned());
-    }
-
-    parsed_data
-
+    value
 }
+
 
 const SERVERCONFIG_DATA: &str = "projectfolder_path =  '''path/to/ruwt/project/directory'''
 \nIp_address = '''127.0.0.1'''
@@ -80,23 +83,23 @@ pub fn create_serverconfig(project_dir: String){
     
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct ServerConfigStruct{
+    pub projectfolder_path: String,
+    pub ip_address: String,
+    pub  port: u16,
+}
+
 /// parses serverconfig.toml
-pub fn parse_serverconfig() -> Vec<String>{
-    let mut parsed_data = vec![];
+pub fn parse_serverconfig() -> ServerConfigStruct{
 
     let current_dir_string = current_dir().unwrap().to_str().unwrap().to_owned();    
 
     let toml_data = fs::read_to_string(current_dir_string + "/serverconfig.toml")
                             .expect("Failed to read TOML file");
 
-    let value = toml_data.parse::<Table>().unwrap();
-    let valid_values = vec!["projectfolder_path", "Ip_address", "Port"];
+    let value: ServerConfigStruct = toml::from_str(&toml_data).unwrap();
 
-    for valid_value in valid_values{
-        let parsing_value = value[valid_value].as_str().unwrap();
-        parsed_data.push(parsing_value.to_owned());
-    }
-
-    parsed_data
+    value
 }
 

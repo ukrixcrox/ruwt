@@ -1,21 +1,30 @@
-use actix_web::{App, HttpServer};
+use actix_web::{App, HttpServer, get, middleware::Logger, HttpResponse, Responder};
 use actix_files::Files;
+use crate::config::ServerConfigStruct;
 
-#[actix_web::main]
-pub async fn start_server(data: Vec<String>) -> std::io::Result<()>{
+#[get("/hello")]
+async fn hello_world() -> impl Responder{
+    HttpResponse::Ok().body("hello world")
+}
+
+
+pub async fn start_server(data: ServerConfigStruct) -> std::io::Result<()>{
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     
-    let mut port_data = data[2].clone();
 
-    let ip = data[1].clone();
+    let ip = data.ip_address.clone();
+    
+    let port = data.port;
 
-    let port = port_data.as_mut_ptr() as u16;
+    log::info!("Running on: {ip}:{port}");
 
     HttpServer::new(move || {
-        let dir = data[0].clone(); // this is probably super unsave, but yolo
+        let dir = data.projectfolder_path.clone(); // this is probably super unsave, but yolo
 
         App::new()
+                .wrap(Logger::default())
                 .service(Files::new("/", dir).index_file("index.html"))
+                .service(hello_world)
         
     })
     .bind((ip, port))?

@@ -2,6 +2,7 @@ use std::path;
 use std::fs;
 use crate::boil;
 use crate::config;
+use crate::config::ConfigData;
 
 pub fn add_file(file_path:&String, project_name: &String){
     let file_name = path::Path::new(file_path)
@@ -30,21 +31,21 @@ pub fn output_verbose(root_dir: &String) {
     ", root_dir)
     }
 
-pub fn create_project(project_name: &String, data: Vec<String>) {
+pub fn create_project(project_name: &String, data: ConfigData) {
     fs::DirBuilder::new()
         .create(project_name)
         .unwrap_or_else(|e| println!("Error: {}", e));
 
-    boil::create_html_file(project_name, &data[0]);
+    boil::create_html_file(project_name, &data.html);
 
     config::create_serverconfig(project_name.to_owned());
 
     let path_static = project_name.to_owned() + &String::from("/static");
     create_static_dir(&path_static);
 
-    boil::create_css_file(&path_static, &data[1]);
+    boil::create_css_file(&path_static, &data.css);
 
-    boil::create_js_file(&path_static, &data[2]);
+    boil::create_js_file(&path_static, &data.js);
 }
 
 /// helper function for create_project

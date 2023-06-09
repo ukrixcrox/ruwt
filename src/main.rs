@@ -13,7 +13,6 @@ mod config;
 
 use clap::{Parser, Subcommand};
 use config::parse_serverconfig;
-use crate::server::start_server;
 use crate::commands::{add_file, output_verbose, create_project};
 use crate::config::{parse_config};
 use std::path::Path;
@@ -77,7 +76,8 @@ struct Opts{
     */
 }
 
-fn main() {
+#[actix_web::main]
+async fn main() {
     let args = Opts::parse();
 
     match args.command {
@@ -107,7 +107,7 @@ fn main() {
         },
          Command::StartServer {start_server} => {
                 if start_server{
-                    server::start_server(parse_serverconfig()).unwrap();
+                        server::start_server(parse_serverconfig()).await.unwrap();
                 }
          }
     }

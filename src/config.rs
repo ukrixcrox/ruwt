@@ -72,8 +72,8 @@ pub fn parse_config() -> ConfigData {
 
 
 const SERVERCONFIG_DATA: &str = "projectfolder_path =  '''path/to/ruwt/project/directory'''
-\nIp_address = '''127.0.0.1'''
-\nPort= '''8080'''";
+\nip_address = '''localhost'''
+\nport= 8080";
 
 /// creates serverconfig.toml in the generated root dir
 pub fn create_serverconfig(project_dir: String){
@@ -98,7 +98,7 @@ pub fn parse_serverconfig() -> ServerConfigStruct{
     let toml_data = fs::read_to_string(current_dir_string + "/serverconfig.toml")
                             .expect("Failed to read TOML file");
 
-    let value: ServerConfigStruct = toml::from_str(&toml_data).unwrap();
+    let value: ServerConfigStruct = toml::from_str(&toml_data).expect("Error: Failed to parse serverconfig.toml");
 
     value
 }

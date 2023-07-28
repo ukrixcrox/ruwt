@@ -21,6 +21,6 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Check Formatting
-    - run: |
+      run: |
         rustup component add rustfmt
         cargo fmt --all --check

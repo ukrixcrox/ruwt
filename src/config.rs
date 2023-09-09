@@ -4,7 +4,7 @@ use std::env::current_dir;
 use std::fs;
 use std::path::PathBuf;
 
-const CONFIG_DATA: &str = "html = '''
+const CONFIG_DATA: &str = "html = \"
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -17,9 +17,9 @@ const CONFIG_DATA: &str = "html = '''
   <h1>Hello, world!</h1>
 </body>
 </html>
-'''
+\"
 
-css = '''
+css = \"
 html{
         background-color: black;
     }
@@ -28,11 +28,11 @@ html{
         color:white;
         text-align: center;
     }
-'''
+\"
 
-js = '''
+js = \"
 console.log('Hello, World!');
-'''";
+\"";
 
 /// creates config.toml at ~/.config/ruwt_config/config.toml
 pub fn create_config() {
@@ -67,8 +67,8 @@ pub fn parse_config() -> ConfigData {
     value
 }
 
-const SERVERCONFIG_DATA: &str = "projectfolder_path =  '''path/to/ruwt/project/directory'''
-\nip_address = '''localhost'''
+const SERVERCONFIG_DATA: &str = "projectfolder_path =  \"path/to/ruwt/project/directory\"
+\nip_address = \"localhost\"
 \nport= 8080";
 
 /// creates serverconfig.toml in the generated root dir

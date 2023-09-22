@@ -19,13 +19,8 @@ use std::path::Path;
 
 #[derive(Subcommand)]
 pub enum Command {
-    StartServer {
-        ///Serve files with actix webserver
-        #[arg(short = 'r')]
-        #[arg(long = "run")]
-        start_server: bool,
-    },
-    CreateProject {
+    /// create a new ruwt project
+    Create {
         ///Project name
         project_name: String,
 
@@ -48,7 +43,11 @@ pub enum Command {
 #[command(author = "krixcrox<falkwitte@github>", version, about)]
 struct Opts {
     #[clap(subcommand)]
-    command: Command,
+    command: Option<Command>,
+
+    /// start the webserver 
+    #[arg(long, short='r')]
+    startserver: bool,
     /*
     ///Project name
     project_name:String,
@@ -76,8 +75,12 @@ struct Opts {
 async fn main() {
     let args = Opts::parse();
 
-    match args.command {
-        Command::CreateProject {
+    if args.startserver {
+        server::start_server(parse_serverconfig()).await.unwrap();
+    }
+
+    match args.command.unwrap() {
+        Command::Create {
             project_name,
             verbose,
             file_path,
@@ -104,10 +107,7 @@ async fn main() {
                 add_file(file_path, &project_name);
             }
         }
-        Command::StartServer { start_server } => {
-            if start_server {
-                server::start_server(parse_serverconfig()).await.unwrap();
-            }
-        }
     }
+
+
 }

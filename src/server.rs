@@ -1,6 +1,6 @@
 use crate::config::ServerConfigStruct;
 use actix_files::Files;
-use actix_web::{get, middleware::Logger, App, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware::Logger, App, HttpServer};
 
 pub async fn start_server(data: ServerConfigStruct) -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));

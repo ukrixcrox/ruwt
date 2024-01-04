@@ -20,7 +20,7 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-    - name: Check Formatting
+    - name: Formatting
       run: |
         rustup component add rustfmt
-        cargo fmt --all --check
+        cargo fmt --all

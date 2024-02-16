@@ -33,5 +33,5 @@ With the command
 ruwt -r
 ```
 you start the server.
-The server needs to be started in the same place where the serverconfig.toml file is.
+Keep in mind that the server needs to be started in the same place where the serverconfig.toml file is.
 

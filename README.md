@@ -30,7 +30,7 @@ The ip_address and port is pretty self-explanatory.
 ## start server
 With the command
 ```
-ruwt start-server -r
+ruwt -r
 ```
 you start the server.
 Keep in mind that the server needs to be started in the same place where the serverconfig.toml file is.

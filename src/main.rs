@@ -40,7 +40,7 @@ pub enum Command {
 
 ///Cli tool to create web boilerplate code
 #[derive(Parser)]
-#[command(author = "krixcrox<falkwitte@github>", version, about)]
+#[command(author = "krixcrox<ukrixcrox@github.com>", version, about)]
 struct Opts {
     #[clap(subcommand)]
     command: Option<Command>,

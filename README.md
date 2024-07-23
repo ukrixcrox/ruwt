@@ -40,5 +40,4 @@ Keep in mind that the server needs to be started in the same place where the ser
 - [ ] add windows port
 - [ ] improve error handling
 - [ ] have option to run server in background
-- [ ] polish code
 

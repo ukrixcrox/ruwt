@@ -5,6 +5,8 @@
 // TODO:
 // - write the html and static boil code into a directory ~/.ruwt_config
 // so those files can be globaly easily configured
+// INFO: for that i could create a lib that makes writing stuff into the
+//       dir easier and more streamlined
 
 mod boil;
 mod commands;
@@ -45,8 +47,8 @@ struct Opts {
     #[clap(subcommand)]
     command: Option<Command>,
 
-    /// start the webserver 
-    #[arg(long, short='r')]
+    /// start the webserver
+    #[arg(long, short = 'r')]
     startserver: bool,
     /*
     ///Project name
@@ -108,6 +110,4 @@ async fn main() {
             }
         }
     }
-
-
 }

@@ -9,7 +9,8 @@
                         /admin-page/ --admin page
                         /login-page/ --login page
                         /.../        --more boilerplate to come
-                      
+              -- this works because the same css classes are used everywhere -- 
+              -- also different styles like catppuccin could go here --
               /style/       --here are the css files
                     /dark/  --darkmode css files
                     /light/  --lightmode css files

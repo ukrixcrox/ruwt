@@ -1,10 +1,12 @@
+/*
 use dirs::config_dir;
 use serde::{Deserialize, Serialize};
 use std::env::current_dir;
 use std::fs;
 use std::path::PathBuf;
+*/
 
-const CONFIG_DATA: &str = "html = \"\"\"
+pub const CONFIG_DATA: &str = "html = \"\"\"
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -34,6 +36,7 @@ js = \"\"\"
 console.log('Hello, World!');
 \"\"\"";
 
+/*
 /// creates config.toml at ~/.config/ruwt_config/config.toml
 pub fn create_config() {
     let config_dir_string = config_dir().unwrap().to_str().unwrap().to_owned();
@@ -97,3 +100,4 @@ pub fn parse_serverconfig() -> ServerConfigStruct {
 
     value
 }
+*/

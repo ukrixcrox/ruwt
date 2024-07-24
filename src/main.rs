@@ -8,15 +8,10 @@
 // INFO: for that i could create a lib that makes writing stuff into the
 //       dir easier and more streamlined
 
-mod boil;
-mod commands;
-mod config;
-mod server;
-
-use crate::commands::{add_file, create_project, output_verbose};
-use crate::config::parse_config;
 use clap::{Parser, Subcommand};
 use config::parse_serverconfig;
+use ruwt::commands::{add_file, create_project, output_verbose};
+use ruwt::config::parse_config;
 use std::path::Path;
 
 #[derive(Subcommand)]

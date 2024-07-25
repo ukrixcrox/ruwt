@@ -58,6 +58,23 @@ impl RuwtConfig {
             path: ruwt_config_file,
         })
     }
+
+    //TODO: implement
+
+    /// write config file
+    pub fn write() {
+        todo!("")
+    }
+
+    /// write dirs to the config dir
+    pub fn write_dir() {
+        todo!("")
+    }
+
+    /// read config file
+    pub fn read() {
+        todo!("")
+    }
 }
 
 /// create a config dir at $HOME

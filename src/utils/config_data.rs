@@ -6,7 +6,7 @@ use std::fs;
 use std::path::PathBuf;
 */
 
-pub const CONFIG_DATA: &str = "html = \"\"\"
+pub const STANDARD_HTML: &str = "html = \"\"\"
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -19,9 +19,9 @@ pub const CONFIG_DATA: &str = "html = \"\"\"
   <h1>Hello, world!</h1>
 </body>
 </html>
-\"\"\"
+\"\"\"";
 
-css = \"\"\"
+pub const STANDARD_CSS: &str = "css = \"\"\"
 html{
         background-color: black;
     }
@@ -30,9 +30,9 @@ html{
         color:white;
         text-align: center;
     }
-\"\"\"
+\"\"\"";
 
-js = \"\"\"
+pub const STANDARD_JS: &str = "js = \"\"\"
 console.log('Hello, World!');
 \"\"\"";
 

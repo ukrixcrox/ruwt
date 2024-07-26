@@ -1,5 +1,6 @@
 //! helps with interacting with the config at $HOME/.config/ruwt/config.toml and below
 use dirs::{config_dir, home_dir};
+use std::fs::{DirBuilder, File};
 use std::{fs, path::PathBuf};
 
 use super::ruwt_error::RuwtError;
@@ -7,7 +8,7 @@ use super::ruwt_types::RuwtResult;
 
 /// struct to help with config
 pub struct RuwtConfig {
-    pub path: PathBuf,
+    pub config_file_path: PathBuf,
 }
 
 impl RuwtConfig {
@@ -55,29 +56,42 @@ impl RuwtConfig {
         }
 
         Ok(RuwtConfig {
-            path: ruwt_config_file,
+            config_file_path: ruwt_config_file,
         })
     }
 
     //TODO: implement
 
     /// write config file
-    pub fn write() {
-        todo!("")
+    pub fn write(&self, content: &str) {
+        self.config_file_path;
     }
 
-    /// write dirs to the config dir
-    pub fn write_dir() {
-        todo!("")
+    /// adds a file to the config dir
+    ///
+    /// param dirpath path of the dir the file is in relative to ~/.config/ruwt/
+    /// param filename name of the file to be created
+    pub fn add_file(&self, dirpath: PathBuf, filename: Option<&str>) {
+        let full_dirpath = self.config_file_path.join(dirpath);
+
+        //TODO: error handling
+        DirBuilder::new().recursive(true).create(full_dirpath);
+
+        //TODO: error handling
+        // create file
+        if let Some(file) = filename {
+            File::create(file);
+        }
     }
 
     /// read config file
-    pub fn read() {
+    pub fn read(&self) {
         todo!("")
     }
 }
 
 /// create a config dir at $HOME
+///
 /// return PathBuf path to config dir
 fn create_config_dir() -> PathBuf {
     let home_dir_path = match home_dir() {

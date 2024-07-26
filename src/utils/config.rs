@@ -71,16 +71,29 @@ impl RuwtConfig {
     ///
     /// param dirpath path of the dir the file is in relative to ~/.config/ruwt/
     /// param filename name of the file to be created
-    pub fn add_file(&self, dirpath: PathBuf, filename: Option<&str>) {
+    /// return full filepath or error
+    pub fn add_file(&self, dirpath: PathBuf, filename: &str) -> RuwtResult<PathBuf> {
         let full_dirpath = self.config_file_path.join(dirpath);
+        let full_path = full_dirpath.join(filename);
 
-        //TODO: error handling
-        DirBuilder::new().recursive(true).create(full_dirpath);
+        match DirBuilder::new().recursive(true).create(full_dirpath) {
+            Ok(()) => (),
+            Err(e) => {
+                return Err(RuwtError::FsError(
+                    //WARN: don't like that return
+                    String::from("can't create dir to put file in"),
+                    full_path,
+                ));
+            }
+        };
 
-        //TODO: error handling
         // create file
-        if let Some(file) = filename {
-            File::create(file);
+        match File::create(filename) {
+            Ok(_) => Ok(full_path),
+            Err(_) => Err(RuwtError::FsError(
+                String::from("can't create file"),
+                full_path,
+            )),
         }
     }
 

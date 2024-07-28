@@ -34,7 +34,6 @@ impl RuwtConfig {
                 Ok(()) => (),
                 Err(error) => {
                     let errormsg = format!("could not create .config/ruwt/: {error}");
-                    //WARN: don't like that return
                     return Err(RuwtError::FatalError(errormsg));
                 }
             };
@@ -49,7 +48,6 @@ impl RuwtConfig {
                     let errormsg = format!(
                         "could not create the config file at .config/ruwt/config.toml: {error}"
                     );
-                    //WARN: don't like that return
                     return Err(RuwtError::FsError(errormsg, ruwt_config_file));
                 }
             };
@@ -80,7 +78,6 @@ impl RuwtConfig {
             Ok(()) => (),
             Err(e) => {
                 return Err(RuwtError::FsError(
-                    //WARN: don't like that return
                     String::from("can't create dir to put file in"),
                     full_path,
                 ));

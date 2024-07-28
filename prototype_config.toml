@@ -1,0 +1,5 @@
+[templates]
+standard = "/templates/standard/standard.html"
+
+[styles]
+dark = "/style/dark/dark.css"

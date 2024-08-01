@@ -1,7 +1,6 @@
-[templates]
-standard = "/templates/standard/standard.html"
-admin = "/templates/admin/admin.html"
+[template]
+default = "/templates/default/"
 
 [styles]
-dark = "/style/dark/dark.css"
-light = "/style/light/light.css"
+dark = "/styles/dark/"
+light = "/styles/light/"
